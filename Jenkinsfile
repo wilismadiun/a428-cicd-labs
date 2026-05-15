@@ -7,6 +7,7 @@ pipeline {
     }
 
     stages {
+
         stage('Build') {
             steps {
                 sh 'npm install'
@@ -16,6 +17,19 @@ pipeline {
         stage('Test') {
             steps {
                 sh './jenkins/scripts/test.sh'
+            }
+        }
+
+        stage('Manual Approval') {
+            steps {
+                input message: 'Lanjutkan ke tahap Deploy?'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh 'nohup npm start &'
+                sh 'sleep 60'
             }
         }
     }
